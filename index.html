@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Événements à Amiens</title>
+    <title>Événements sur Eventbrite</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,15 +32,15 @@
     </style>
 </head>
 <body>
-    <h1>Événements à Amiens</h1>
+    <h1>Événements sur Eventbrite</h1>
     <div id="events-container">Chargement des événements...</div>
 
     <script>
-        const publicToken = '2SRR5RCHFKLSFEXXQJQS';
+        const publicToken = '2SRR5RCHFKLSFEXXQJQS'; // Remplace par ton token public
 
-        async function fetchEvents() {
+        async function fetchEvents(query = '') {
             try {
-                const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?q=amiens&token=${publicToken}`);
+                const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?q=${encodeURIComponent(query)}&token=${publicToken}`);
                 if (!response.ok) {
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
@@ -78,7 +78,8 @@
             });
         }
 
-        fetchEvents();
+        // Appelle fetchEvents avec une recherche générale pour tester
+        fetchEvents(''); // Appelle sans requête spécifique pour tester la recherche générale
     </script>
 </body>
 </html>
