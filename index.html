@@ -6,68 +6,41 @@
     <title>Événements à Amiens</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #2b2e4a;
-            color: white;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
         }
-        header {
-            background-color: #1f2235;
-            padding: 1rem;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-        .events-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+        #events-container {
             margin: 20px;
         }
         .event {
-            background-color: #3e4169;
-            border-radius: 10px;
-            width: 300px;
-            margin: 15px;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-        .event:hover {
-            transform: scale(1.05);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
         }
         .event img {
-            width: 100%;
-            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
         }
         .event h3 {
-            font-size: 1.5rem;
-            margin: 10px 0;
-        }
-        .event p {
-            font-size: 1rem;
+            margin: 0 0 10px 0;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Événements à Amiens, Picardie</h1>
-    </header>
-    
-    <div class="events-container" id="events-container">
-        <!-- Les événements seront injectés ici via JavaScript -->
-    </div>
+    <h1>Événements à Amiens</h1>
+    <div id="events-container">Chargement des événements...</div>
 
     <script>
         const publicToken = '2SRR5RCHFKLSFEXXQJQS';
-        const city = 'Amiens';
 
         async function fetchEvents() {
             try {
-                const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?location.address=${city}&location.within=10km&token=${publicToken}`);
+                const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?q=amiens&token=${publicToken}`);
                 if (!response.ok) {
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
@@ -76,6 +49,7 @@
                 displayEvents(data.events);
             } catch (error) {
                 console.error('Erreur lors de la récupération des événements:', error);
+                document.getElementById('events-container').innerHTML = '<p>Erreur lors de la récupération des événements.</p>';
             }
         }
 
@@ -83,15 +57,15 @@
             const eventsContainer = document.getElementById('events-container');
             eventsContainer.innerHTML = ''; // Nettoie le conteneur avant d'ajouter de nouveaux événements
 
-            if (events.length === 0) {
-                eventsContainer.innerHTML = '<p>Aucun événement trouvé pour Amiens.</p>';
+            if (!events || events.length === 0) {
+                eventsContainer.innerHTML = '<p>Aucun événement trouvé.</p>';
                 return;
             }
 
             events.forEach(event => {
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event');
-                
+
                 eventDiv.innerHTML = `
                     <img src="${event.logo ? event.logo.url : 'placeholder.jpg'}" alt="${event.name.text}">
                     <h3>${event.name.text}</h3>
@@ -99,7 +73,7 @@
                     <p><strong>Date:</strong> ${new Date(event.start.local).toLocaleDateString('fr-FR')}</p>
                     <p><strong>Lieu:</strong> ${event.venue ? event.venue.address.localized_address_display : 'Adresse non disponible'}</p>
                 `;
-                
+
                 eventsContainer.appendChild(eventDiv);
             });
         }
