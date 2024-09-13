@@ -62,17 +62,32 @@
     </div>
 
     <script>
-        const apiKey = 'BS6VDBKGRUMWTJOIEO';
+        const publicToken = '2SRR5RCHFKLSFEXXQJQS';
         const city = 'Amiens';
 
         async function fetchEvents() {
-            const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?location.address=${city}&location.within=10km&token=${apiKey}`);
-            const data = await response.json();
-            return data.events;
+            try {
+                const response = await fetch(`https://www.eventbriteapi.com/v3/events/search/?location.address=${city}&location.within=10km&token=${publicToken}`);
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(data); // Vérifie les données dans la console
+                displayEvents(data.events);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des événements:', error);
+            }
         }
 
         function displayEvents(events) {
             const eventsContainer = document.getElementById('events-container');
+            eventsContainer.innerHTML = ''; // Nettoie le conteneur avant d'ajouter de nouveaux événements
+
+            if (events.length === 0) {
+                eventsContainer.innerHTML = '<p>Aucun événement trouvé pour Amiens.</p>';
+                return;
+            }
+
             events.forEach(event => {
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event');
@@ -89,7 +104,7 @@
             });
         }
 
-        fetchEvents().then(events => displayEvents(events)).catch(error => console.error('Erreur lors du chargement des événements:', error));
+        fetchEvents();
     </script>
 </body>
 </html>
