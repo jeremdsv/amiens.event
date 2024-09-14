@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Événements à Amiens</title>
+    <title>Événements Ticketmaster</title>
 </head>
 <body>
-    <h1>Événements à Amiens</h1>
+    <h1>Événements à venir</h1>
     <div id="event-container">
         <p>Chargement des événements...</p>
     </div>
 
     <script>
-        const apiKey = 'ncRAM7hqmAa0hPQ6XNIq2PZt9nOjGcuL';  // Clé du consommateur Ticketmaster
-        const url = `https://app.ticketmaster.com/discovery/v2/events.json?city=Amiens&apikey=${apiKey}`;
+        const apiKey = 'ncRAM7hqmAa0hPQ6XNIq2PZt9nOjGcuL';  // Clé API Ticketmaster
+        const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}`;
 
         async function fetchEvents() {
             try {
